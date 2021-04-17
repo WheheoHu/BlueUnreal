@@ -14,7 +14,6 @@ unsigned long debounceDelay = 50;   // the debounce time; increase if the output
 
 void setup()
 {
-    Serial.begin(115200);
     M5.begin();
     M5.IMU.Init();
 
@@ -28,12 +27,7 @@ void setup()
 
     BMDConnection.begin("AA");
 
-    //DEBUG AA
-    M5.Lcd.setCursor(10, 30);
-    M5.Lcd.fillScreen(BLACK);
-    M5.Lcd.print("Begin AA");
-
-    // BMDControl = BMDConnection.connect();
+   // BMDControl = BMDConnection.connect();
 
     M5.Lcd.fillScreen(BLACK);
     M5.Lcd.print("TEST");
