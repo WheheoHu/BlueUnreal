@@ -27,7 +27,7 @@ void setup()
 
     BMDConnection.begin("AA");
 
-   // BMDControl = BMDConnection.connect();
+   BMDControl = BMDConnection.connect();
 
     M5.Lcd.fillScreen(BLACK);
     M5.Lcd.print("TEST");
