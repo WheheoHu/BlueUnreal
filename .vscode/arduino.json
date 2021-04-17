@@ -1,5 +1,5 @@
 {
-    "port": "COM7",
+    "port": "COM1",
     "configuration": "PartitionScheme=default,UploadSpeed=1500000,DebugLevel=none",
     "board": "esp32:esp32:m5stick-c",
     "sketch": "TEST.ino",
