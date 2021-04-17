@@ -43,7 +43,7 @@ void loop()
    
     //Serial.println("TEST Serial");
 
-
+    //state of button
     int reading = digitalRead(BUTTON_PIN);
 
     // If the switch changed, due to noise or pressing:
