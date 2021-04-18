@@ -9,7 +9,7 @@ int buttonState;           // the current reading from the input pin
 int lastButtonState = LOW; // the previous reading from the input pin
 
 
-unsigned long lastDebounceTime = 0; // the last time the output pin was toggled
+unsigned long lastDebounceTime = 0; // the last time the output pin was toggled 最后一次切换输出引脚
 unsigned long debounceDelay = 50;   // the debounce time; increase if the output flickers
 
 void setup()
@@ -39,10 +39,19 @@ void setup()
 
 void loop()
 {
-
-   
     //Serial.println("TEST Serial");
+    
+    //按键录制
+     buttonRecording(); 
 
+    //参数显示
+    setOnScreen();
+
+}
+
+//按键录制
+void buttonRecording()
+{
     //state of button
     int reading = digitalRead(BUTTON_PIN);
 
@@ -71,4 +80,39 @@ void loop()
         }
     }
     lastButtonState = reading;
+}
+
+//参数显示
+void setOnScreen(){
+    M5.update();
+
+    if (M5.BtnB.wasPressed())
+    {
+        ESP.restart();
+    }
+
+    if (BMDConnection.available())
+    {
+
+        if (BMDControl->changed())
+        {
+
+            M5.Lcd.fillScreen(TFT_BLACK);
+            printOnScreen(2, 0, "IRIS : F" + String(BMDControl->getAperture(), 1));
+            printOnScreen(2, 16,"SHUTTER : " + String(BMDControl->getShutter()) + "°");
+            printOnScreen(2, 32, "ISO : " + String(BMDControl->getIso()));
+            printOnScreen(2, 48, "WB : " + String(BMDControl->getWhiteBalance()) + "K");
+            printOnScreen(2, 64, "TINT : " + String(BMDControl->getTint()));
+        }
+    }
+
+}
+
+//屏幕显示
+void printOnScreen(int x, int y, String text)
+{
+    M5.Lcd.setCursor(x, y, 2);
+    M5.Lcd.setTextColor(TFT_WHITE);
+    M5.Lcd.setTextSize(1);
+    M5.Lcd.println(text);
 }
