@@ -42,7 +42,7 @@ void loop()
     //Serial.println("TEST Serial");
     
     //按键录制
-     buttonRecording();
+     buttonRecording(); 
 
     //参数显示
     setOnScreen();
