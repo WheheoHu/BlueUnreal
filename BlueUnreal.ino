@@ -46,7 +46,7 @@ void loop()
 
     //参数显示
     setOnScreen();
-    
+
 }
 
 //按键录制
@@ -98,7 +98,6 @@ void setOnScreen(){
         {
 
             M5.Lcd.fillScreen(TFT_BLACK);
-
             printOnScreen(2, 0, "IRIS : F" + String(BMDControl->getAperture(), 1));
             printOnScreen(2, 16,"SHUTTER : " + String(BMDControl->getShutter()) + "°");
             printOnScreen(2, 32, "ISO : " + String(BMDControl->getIso()));
