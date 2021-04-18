@@ -28,8 +28,10 @@ void loop()
     if (buttonread)
     {
         digitalWrite(LED_PIN,1);
+        Serial.println("AA");
         
-    }else
+    }
+    else
     {
         digitalWrite(LED_PIN,0);
     }
