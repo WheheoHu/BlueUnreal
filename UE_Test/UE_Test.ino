@@ -3,8 +3,7 @@
 #define LED_PIN 10
 #define BUTTON_PIN 37
 
-
-int buttonread=0;
+int buttonread = 0;
 void setup()
 {
     M5.begin();
@@ -24,18 +23,25 @@ void setup()
 
 void loop()
 {
-    buttonread=digitalRead(BUTTON_PIN);
+    buttonread = digitalRead(BUTTON_PIN);
+    // if (!Serial.available())
+    //     return;
+    // String str = Serial.readString();
+
     if (buttonread)
     {
-        digitalWrite(LED_PIN,1);
-       
-        
+        digitalWrite(LED_PIN, 1);
     }
     else
     {
-        digitalWrite(LED_PIN,0);
-         Serial.println("AA");
+        digitalWrite(LED_PIN, 0);
+
+        // int len=12;
+        // Serial.println(len);
+        float fVal = 12.34f;
+        byte *fBuffer = reinterpret_cast<byte *>(&fVal);
+        Serial.write(fBuffer, 4);
+
+        delay(100);
     }
-    
-    
 }
