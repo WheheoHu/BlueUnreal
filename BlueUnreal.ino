@@ -52,34 +52,6 @@ void loop()
 //按键录制
 void buttonRecording()
 {
-    // //state of button
-    // int reading = digitalRead(BUTTON_PIN);
-
-    // // If the switch changed, due to noise or pressing:
-    // if (reading != lastButtonState)
-    // {
-    //     lastDebounceTime = millis();
-    //     Serial.println(lastDebounceTime);
-    // }
-
-    // if ((millis() - lastDebounceTime) > debounceDelay)
-    // {
-    //     if (reading != buttonState)
-    //     {
-    //         buttonState = reading;
-
-    //         // only toggle the LED if the new button state is HIGH
-    //         if (buttonState == HIGH)
-    //         {
-    //             Serial.println("Rec");
-    //             if (BMDConnection.available())
-    //             {
-    //                 BMDControl->toggleRecording();
-    //             }
-    //         }
-    //     }
-    // }
-    // lastButtonState = reading;
     if (BMDConnection.available())
     {
         if (M5.BtnA.wasPressed())
@@ -116,7 +88,7 @@ void setOnScreen()
         {
 
             M5.Lcd.fillScreen(TFT_BLACK);
-            printOnScreen(2, 0, "A.v : F" + String(BMDControl->getAperture(), 1));
+            printOnScreen(2, 0, "IRIS : F" + String(BMDControl->getAperture(), 1));
             printOnScreen(2, 16, "SHUTTER : " + String(BMDControl->getShutter()) + "°");
             printOnScreen(2, 32, "ISO : " + String(BMDControl->getIso()));
             printOnScreen(2, 48, "WB : " + String(BMDControl->getWhiteBalance()) + "K");
