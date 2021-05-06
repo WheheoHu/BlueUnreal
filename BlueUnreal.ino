@@ -32,6 +32,7 @@ void setup()
     M5.Lcd.setCursor(10, 30);
     M5.Lcd.fillScreen(BLACK);
     M5.Lcd.print("Connected");
+    Serial.setTimeout(5);
     delay(1000);
     pinMode(LED_PIN,OUTPUT);
     digitalWrite(LED_PIN, HIGH);
@@ -47,8 +48,22 @@ void loop()
 
     //参数显示
     setOnScreen();
-}
 
+    if (Serial.available())
+    {
+        String str = Serial.readString();
+        if (str="Aperture")
+        {
+            control_aperture();
+        }
+        
+    }
+    
+}
+void control_aperture(){
+    float faperture_value=BMDControl->getAperture();
+    write_float(faperture_value);
+}
 //按键录制
 void buttonRecording()
 {
@@ -104,4 +119,9 @@ void printOnScreen(int x, int y, String text)
     M5.Lcd.setTextColor(TFT_WHITE);
     M5.Lcd.setTextSize(1);
     M5.Lcd.println(text);
+}
+
+void write_float(float fVal){
+    byte *fBuffer = reinterpret_cast<byte *>(&fVal);
+    Serial.write(fBuffer, 4);
 }
