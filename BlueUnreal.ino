@@ -11,6 +11,12 @@ int lastButtonState = LOW; // the previous reading from the input pin
 unsigned long lastDebounceTime = 0; // the last time the output pin was toggled 最后一次切换输出引脚
 unsigned long debounceDelay = 50;   // the debounce time; increase if the output flickers
 
+float fAperture_value = 0;
+float fShutter_value = 0;
+int32_t iISO_value = 0;
+int16_t iWhiteBalance_value = 0;
+int16_t iTint_value = 0;
+
 void setup()
 {
     M5.begin();
@@ -34,36 +40,34 @@ void setup()
     M5.Lcd.print("Connected");
     Serial.setTimeout(5);
     delay(1000);
-    pinMode(LED_PIN,OUTPUT);
+    pinMode(LED_PIN, OUTPUT);
     digitalWrite(LED_PIN, HIGH);
-
 }
 
 void loop()
 {
     //Serial.println("TEST Serial");
-
+    collect_data();
     //按键录制
     buttonRecording();
 
     //参数显示
     setOnScreen();
 
-    if (Serial.available())
+    if (!Serial.available())
+        return;
+
+    String str = Serial.readString();
+    if (str == "Aperture")
     {
-        String str = Serial.readString();
-        if (str="Aperture")
-        {
-            control_aperture();
-        }
-        
+        write_float(fAperture_value);
     }
-    
+    else if (str == "Shutter")
+    {
+        write_float(shutter_angle_to_speed(24.0f, fShutter_value));
+    }
 }
-void control_aperture(){
-    float faperture_value=BMDControl->getAperture();
-    write_float(faperture_value);
-}
+
 //按键录制
 void buttonRecording()
 {
@@ -103,13 +107,22 @@ void setOnScreen()
         {
 
             M5.Lcd.fillScreen(TFT_BLACK);
-            printOnScreen(2, 0, "IRIS : F" + String(BMDControl->getAperture(), 1));
-            printOnScreen(2, 16, "SHUTTER : " + String(BMDControl->getShutter()) + "°");
-            printOnScreen(2, 32, "ISO : " + String(BMDControl->getIso()));
-            printOnScreen(2, 48, "WB : " + String(BMDControl->getWhiteBalance()) + "K");
-            printOnScreen(2, 64, "TINT : " + String(BMDControl->getTint()));
+            printOnScreen(2, 0, "IRIS : F" + String(fAperture_value, 1));
+            printOnScreen(2, 16, "SHUTTER : " + String(fShutter_value) + "°");
+            printOnScreen(2, 32, "ISO : " + String(iISO_value));
+            printOnScreen(2, 48, "WB : " + String(iWhiteBalance_value) + "K");
+            printOnScreen(2, 64, "TINT : " + String(iTint_value));
         }
     }
+}
+
+void collect_data()
+{
+    fAperture_value = BMDControl->getAperture();
+    fShutter_value = BMDControl->getShutter();
+    iISO_value = BMDControl->getIso();
+    iWhiteBalance_value = BMDControl->getWhiteBalance();
+    iTint_value = BMDControl->getTint();
 }
 
 //屏幕显示
@@ -121,7 +134,13 @@ void printOnScreen(int x, int y, String text)
     M5.Lcd.println(text);
 }
 
-void write_float(float fVal){
+void write_float(float fVal)
+{
     byte *fBuffer = reinterpret_cast<byte *>(&fVal);
     Serial.write(fBuffer, 4);
+}
+
+float shutter_angle_to_speed(float fFrameRate, float fShutter_Angle_value)
+{
+    return 360.0f * fFrameRate / fShutter_Angle_value;
 }
