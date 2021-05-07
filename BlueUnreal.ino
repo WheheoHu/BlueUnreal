@@ -45,7 +45,6 @@ void setup()
 
 void loop()
 {
-    //Serial.println("TEST Serial");
     collect_data();
     //按键录制
     buttonRecording();
@@ -126,7 +125,7 @@ void setOnScreen()
         }
     }
 }
-
+//collect camera data 
 void collect_data()
 {
     fAperture_value = BMDControl->getAperture();
@@ -145,17 +144,20 @@ void printOnScreen(int x, int y, String text)
     M5.Lcd.println(text);
 }
 
+//write a float value to Serial
 void write_float(float fVal)
 {
     byte *fBuffer = reinterpret_cast<byte *>(&fVal);
     Serial.write(fBuffer, 4);
 }
 
+//convert shutter angle value (degree) to shutter speed value (1/s)
 float shutter_angle_to_speed(float fFrameRate, float fShutter_Angle_value)
 {
     return 360.0f * fFrameRate / fShutter_Angle_value;
 }
 
+//write a int 32 value to serial
 void write_int32(int32_t iVal)
 {
     byte iBuffer[] = {
@@ -166,6 +168,7 @@ void write_int32(int32_t iVal)
     Serial.write(iBuffer, 4);
 }
 
+//wirte a int 16 value to serial
 void write_int16(int16_t iVal)
 {
     byte iBuffer[] = {
