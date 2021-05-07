@@ -8,7 +8,6 @@
 int buttonState;           // the current reading from the input pin
 int lastButtonState = LOW; // the previous reading from the input pin
 
-unsigned long lastDebounceTime = 0; // the last time the output pin was toggled 最后一次切换输出引脚
 unsigned long debounceDelay = 50;   // the debounce time; increase if the output flickers
 
 float fAperture_value = 0;
@@ -65,6 +64,18 @@ void loop()
     else if (str == "Shutter")
     {
         write_float(shutter_angle_to_speed(24.0f, fShutter_value));
+    }
+    else if (str == "ISO")
+    {
+        write_int32(iISO_value);
+    }
+    else if (str == "WB")
+    {
+        write_int16(iWhiteBalance_value);
+    }
+    else if (str == "TINT")
+    {
+        write_int16(iTint_value);
     }
 }
 
@@ -143,4 +154,22 @@ void write_float(float fVal)
 float shutter_angle_to_speed(float fFrameRate, float fShutter_Angle_value)
 {
     return 360.0f * fFrameRate / fShutter_Angle_value;
+}
+
+void write_int32(int32_t iVal)
+{
+    byte iBuffer[] = {
+        byte(iVal & 0xff),
+        byte(iVal >> 8 & 0xff),
+        byte(iVal >> 16 & 0xff),
+        byte(iVal >> 24 & 0xff)};
+    Serial.write(iBuffer, 4);
+}
+
+void write_int16(int16_t iVal)
+{
+    byte iBuffer[] = {
+        byte(iVal & 0xff),
+        byte(iVal >> 8 & 0xff)};
+    Serial.write(iBuffer, 2);
 }
